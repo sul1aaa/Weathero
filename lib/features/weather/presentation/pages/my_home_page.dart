@@ -29,6 +29,7 @@ class MyHomePage extends StatelessWidget {
                   //   "${weather.cityName}  -  ${weather.currentTemp}°C",
                   //   style: TextStyle(fontWeight: FontWeight.w600),
                   // ),
+                  // sup nigga
                   flexibleSpace: FlexibleSpaceBar(
                     background: Container(
                       color: Colors.blueAccent,
