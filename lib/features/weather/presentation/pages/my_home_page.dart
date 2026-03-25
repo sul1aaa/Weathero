@@ -25,11 +25,10 @@ class MyHomePage extends StatelessWidget {
                   expandedHeight: 350,
                   backgroundColor: Colors.white,
                   pinned: true,
-                  // title: Text(
-                  //   "${weather.cityName}  -  ${weather.currentTemp}°C",
-                  //   style: TextStyle(fontWeight: FontWeight.w600),
-                  // ),
-                  // sup nigga
+                  title: Text(
+                    "${weather.cityName}  -  ${weather.currentTemp}°C",
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
                   flexibleSpace: FlexibleSpaceBar(
                     background: Container(
                       color: Colors.blueAccent,
