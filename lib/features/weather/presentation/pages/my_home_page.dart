@@ -9,29 +9,33 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFF0A0F2C),
       body: BlocBuilder<WeatherBloc, WeatherState>(
         builder: (context, state) {
           if (state is WeatherLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: CircularProgressIndicator(color: Colors.white),
+            );
           }
 
           if (state is WeatherLoaded) {
             final weather = state.weather;
-
             return CustomScrollView(
               slivers: [
                 SliverAppBar(
-                  expandedHeight: 350,
-                  backgroundColor: Colors.white,
+                  expandedHeight: 320,
+                  backgroundColor: const Color(0xFF0A0F2C),
                   pinned: true,
-                  title: Text(
-                    "${weather.cityName}  -  ${weather.currentTemp}°C",
-                    style: TextStyle(fontWeight: FontWeight.w600),
-                  ),
+
                   flexibleSpace: FlexibleSpaceBar(
                     background: Container(
-                      color: Colors.blueAccent,
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [Color(0xFF1B2A6B), Color(0xFF0A0F2C)],
+                        ),
+                      ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -39,27 +43,37 @@ class MyHomePage extends StatelessWidget {
                           Text(
                             weather.cityName,
                             style: const TextStyle(
-                              fontSize: 28,
+                              fontSize: 32,
+                              fontWeight: FontWeight.w600,
                               color: Colors.white,
+                              letterSpacing: -0.5,
                             ),
                           ),
+                          const SizedBox(height: 8),
                           Text(
-                            "${weather.currentTemp}°C",
+                            '${weather.currentTemp}°',
                             style: const TextStyle(
-                              fontSize: 64,
+                              fontSize: 96,
+                              fontWeight: FontWeight.w200,
                               color: Colors.white,
+                              height: 1,
                             ),
                           ),
+                          const SizedBox(height: 8),
                           Text(
                             weather.description,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 18,
-                              color: Colors.white,
+                              color: Colors.white.withAlpha(179),
                             ),
                           ),
+                          const SizedBox(height: 4),
                           Text(
-                            "Max: ${weather.maxTemp}°C  Min: ${weather.minTemp}°C",
-                            style: const TextStyle(color: Colors.white),
+                            'H: ${weather.maxTemp}°  L: ${weather.minTemp}°',
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.white.withAlpha(128),
+                            ),
                           ),
                         ],
                       ),
@@ -67,73 +81,79 @@ class MyHomePage extends StatelessWidget {
                   ),
                 ),
 
+                // Hourly forecast
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: SizedBox(
-                      height: 130,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: weather.next6Hours.length,
-                        itemBuilder: (context, i) {
-                          final hour = weather.next6Hours[i];
-                          return SizedBox(
-                            width: 90,
-                            child: Card(
-                              color: Colors.blueAccent,
-                              margin: const EdgeInsets.only(right: 12),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 12,
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      hour.time.split(" ")[1],
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withAlpha(18),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Colors.white.withAlpha(26)),
+                      ),
+                      child: SizedBox(
+                        height: 90,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          itemCount: weather.next6Hours.length,
+                          itemBuilder: (context, i) {
+                            final hour = weather.next6Hours[i];
+                            return Container(
+                              width: 64,
+                              margin: const EdgeInsets.only(right: 8),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    hour.time.split(' ')[1],
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: Colors.white.withAlpha(153),
                                     ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      "${hour.temp}°C",
-                                      style: TextStyle(color: Colors.white),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    '${hour.temp}°',
+                                    style: const TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.white,
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
                 ),
 
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    childCount: weather.next10Days.length,
-                    (context, i) {
-                      final day = weather.next10Days[i];
-                      return Container(
-                        height: 70,
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.blueAccent,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Padding(
+                const SliverToBoxAdapter(child: SizedBox(height: 16)),
+
+                // 10 day forecast
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      childCount: weather.next10Days.length,
+                      (context, i) {
+                        final day = weather.next10Days[i];
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 8),
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 12,
+                            horizontal: 20,
+                            vertical: 16,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withAlpha(18),
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                              color: Colors.white.withAlpha(20),
+                            ),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -142,45 +162,54 @@ class MyHomePage extends StatelessWidget {
                                 day.date,
                                 style: const TextStyle(
                                   color: Colors.white,
-                                  fontSize: 16,
+                                  fontSize: 15,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
                               Row(
                                 children: [
                                   Text(
-                                    "${day.minTemp}°",
-                                    style: const TextStyle(
-                                      color: Colors.white70,
-                                      fontSize: 16,
+                                    '${day.minTemp}°',
+                                    style: TextStyle(
+                                      color: Colors.white.withAlpha(101),
+                                      fontSize: 15,
                                     ),
                                   ),
-                                  const SizedBox(width: 12),
+                                  const SizedBox(width: 16),
                                   Text(
-                                    "${day.maxTemp}°",
+                                    '${day.maxTemp}°',
                                     style: const TextStyle(
                                       color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                 ],
                               ),
                             ],
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                 ),
+
+                const SliverToBoxAdapter(child: SizedBox(height: 32)),
               ],
             );
           }
 
           if (state is WeatherError) {
-            return Center(child: Text("Error: ${state.message}"));
+            return Center(
+              child: Text(
+                'Error: ${state.message}',
+                style: const TextStyle(color: Colors.white),
+              ),
+            );
           }
-          return const Center(child: Text("Unknown state"));
+          return const Center(
+            child: Text('Unknown state', style: TextStyle(color: Colors.white)),
+          );
         },
       ),
     );
