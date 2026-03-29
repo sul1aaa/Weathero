@@ -5,7 +5,6 @@ class WeatherModel {
   final double minTemp;
   final double maxTemp;
   final List<HourModel> next6Hours;
-  final List<DayModel> next6Days;
   final List<DayModel> next10Days;
 
   WeatherModel({
@@ -15,38 +14,60 @@ class WeatherModel {
     required this.minTemp,
     required this.maxTemp,
     required this.next6Hours,
-    required this.next6Days,
     required this.next10Days,
   });
 
   factory WeatherModel.fromJson(Map<String, dynamic> json) {
-    final forecastDays = json['forecast']['forecastday'];
+    final hourlyTimes = List<String>.from(json['hourly']['time']);
+    final hourlyTemps = List<dynamic>.from(json['hourly']['temperature_2m']);
 
-    final hours = forecastDays[0]['hour']
-        .take(10)
-        .map<HourModel>((e) => HourModel.fromJson(e))
-        .toList();
+    final now = DateTime.now();
 
-    final sixDays = forecastDays
-        .take(6)
-        .map<DayModel>((e) => DayModel.fromJson(e))
-        .toList();
+    final hours = <HourModel>[];
+    for (int i = 0; i < hourlyTimes.length && hours.length < 10; i++) {
+      final t = DateTime.parse(hourlyTimes[i]);
+      if (t.isAfter(now.subtract(const Duration(minutes: 30)))) {
+        hours.add(
+          HourModel(time: hourlyTimes[i], temp: hourlyTemps[i].toDouble()),
+        );
+      }
+    }
 
-    final tenDays = forecastDays
-        .take(10)
-        .map<DayModel>((e) => DayModel.fromJson(e))
-        .toList();
+    final dailyDates = List<String>.from(json['daily']['time']);
+    final dailyMax = List<dynamic>.from(json['daily']['temperature_2m_max']);
+    final dailyMin = List<dynamic>.from(json['daily']['temperature_2m_min']);
+
+    final days = List.generate(dailyDates.length, (i) {
+      return DayModel(
+        date: dailyDates[i],
+        minTemp: dailyMin[i].toDouble(),
+        maxTemp: dailyMax[i].toDouble(),
+      );
+    });
+
+    final currentTemp = json['current']['temperature_2m'].toDouble();
+    final weatherCode = json['current']['weathercode'];
 
     return WeatherModel(
-      currentTemp: json['current']['temp_c'].toDouble(),
-      cityName: json['location']['name'],
-      description: json['current']['condition']['text'],
-      minTemp: forecastDays[0]['day']['mintemp_c'].toDouble(),
-      maxTemp: forecastDays[0]['day']['maxtemp_c'].toDouble(),
+      currentTemp: currentTemp,
+      cityName: json['city_name'] ?? 'Unknown',
+      description: _weatherDescription(weatherCode),
+      minTemp: dailyMin[0].toDouble(),
+      maxTemp: dailyMax[0].toDouble(),
       next6Hours: hours,
-      next6Days: sixDays,
-      next10Days: tenDays,
+      next10Days: days,
     );
+  }
+
+  static String _weatherDescription(int code) {
+    if (code == 0) return 'Clear sky';
+    if (code <= 3) return 'Partly cloudy';
+    if (code <= 48) return 'Foggy';
+    if (code <= 67) return 'Rainy';
+    if (code <= 77) return 'Snowy';
+    if (code <= 82) return 'Rain showers';
+    if (code <= 99) return 'Thunderstorm';
+    return 'Unknown';
   }
 }
 
@@ -55,10 +76,6 @@ class HourModel {
   final double temp;
 
   HourModel({required this.time, required this.temp});
-
-  factory HourModel.fromJson(Map<String, dynamic> json) {
-    return HourModel(time: json['time'], temp: json['temp_c'].toDouble());
-  }
 }
 
 class DayModel {
@@ -67,12 +84,4 @@ class DayModel {
   final double maxTemp;
 
   DayModel({required this.date, required this.minTemp, required this.maxTemp});
-
-  factory DayModel.fromJson(Map<String, dynamic> json) {
-    return DayModel(
-      date: json['date'],
-      minTemp: json['day']['mintemp_c'].toDouble(),
-      maxTemp: json['day']['maxtemp_c'].toDouble(),
-    );
-  }
 }

@@ -1,10 +1,45 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weathero/features/weather/presentation/bloc/weather_bloc.dart';
+import 'package:weathero/features/weather/presentation/bloc/weather_event.dart';
 import 'package:weathero/features/weather/presentation/bloc/weather_state.dart';
+import 'package:weathero/features/weather/presentation/pages/cities_page.dart';
+import 'package:weathero/features/weather/presentation/widgets/build_shimmer_widget.dart';
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
+class WeatherInfoPage extends StatefulWidget {
+  final String? city;
+  const WeatherInfoPage({super.key, this.city});
+
+  @override
+  State<WeatherInfoPage> createState() => _WeatherInfoPage();
+}
+
+class _WeatherInfoPage extends State<WeatherInfoPage> {
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.city != null) {
+      context.read<WeatherBloc>().add(LoadWeather(widget.city!));
+    } else {
+      context.read<WeatherBloc>().add(LoadWeatherByLocation());
+    }
+    _timer = Timer.periodic(const Duration(hours: 1), (_) {
+      if (widget.city != null) {
+        context.read<WeatherBloc>().add(LoadWeather(widget.city!));
+      } else {
+        context.read<WeatherBloc>().add(LoadWeatherByLocation());
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,9 +48,7 @@ class MyHomePage extends StatelessWidget {
       body: BlocBuilder<WeatherBloc, WeatherState>(
         builder: (context, state) {
           if (state is WeatherLoading) {
-            return const Center(
-              child: CircularProgressIndicator(color: Colors.white),
-            );
+            return buildShimmer();
           }
 
           if (state is WeatherLoaded) {
@@ -26,7 +59,34 @@ class MyHomePage extends StatelessWidget {
                   expandedHeight: 320,
                   backgroundColor: const Color(0xFF0A0F2C),
                   pinned: true,
-
+                  actions: [
+                    IconButton(
+                      icon: const Icon(
+                        Icons.location_city,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const CitiesPage()),
+                        );
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.refresh, color: Colors.white),
+                      onPressed: () {
+                        if (widget.city != null) {
+                          context.read<WeatherBloc>().add(
+                            LoadWeather(widget.city!),
+                          );
+                        } else {
+                          context.read<WeatherBloc>().add(
+                            LoadWeatherByLocation(),
+                          );
+                        }
+                      },
+                    ),
+                  ],
                   flexibleSpace: FlexibleSpaceBar(
                     background: Container(
                       decoration: const BoxDecoration(
@@ -107,7 +167,7 @@ class MyHomePage extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    hour.time.split(' ')[1],
+                                    hour.time.split('T')[1],
                                     style: TextStyle(
                                       fontSize: 13,
                                       color: Colors.white.withAlpha(153),
@@ -201,12 +261,25 @@ class MyHomePage extends StatelessWidget {
 
           if (state is WeatherError) {
             return Center(
-              child: Text(
-                'Error: ${state.message}',
-                style: const TextStyle(color: Colors.white),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Error: ${state.message}',
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<WeatherBloc>().add(LoadWeatherByLocation());
+                    },
+                    child: const Text('Retry'),
+                  ),
+                ],
               ),
             );
           }
+
           return const Center(
             child: Text('Unknown state', style: TextStyle(color: Colors.white)),
           );
