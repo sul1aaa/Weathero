@@ -7,12 +7,7 @@ class WeatherRepositoryImpl {
   WeatherRepositoryImpl(this.remote);
 
   Future<WeatherModel> getWeather(String city) async {
-    final json = await remote.getForecast(city);
-    return WeatherModel.fromJson(json);
-  }
-
-  Future<WeatherModel> getForecast(String query) async {
-    final json = await remote.getForecast(query);
+    final json = await remote.getForecastByCity(city);
     return WeatherModel.fromJson(json);
   }
 }

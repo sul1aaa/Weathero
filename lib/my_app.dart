@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weathero/features/weather/presentation/pages/my_home_page.dart';
+import 'package:weathero/features/weather/presentation/pages/weather_info_page.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyHomePage(),
+      home: const WeatherInfoPage(),
     );
   }
 }
