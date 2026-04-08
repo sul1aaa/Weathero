@@ -19,34 +19,3 @@ void main() {
     ),
   );
 }
-
-// salem alem comment
-// wazesxrdctfvygbuhnijm
-// rwetxrdcytfvugybhul,;
-//sw5e4trdy5ft6g7yh8uj9i0kopl[;-o0i9up8yo7t8i67uzxtyct8yviuobhipj
-//ewwxrdyctfuvygibuhnijkml]
-// salem alem comment
-// wazesxrdctfvygbuhnijm
-// rwetxrdcytfvugybhul,;
-//sw5e4trdy5ft6g7yh8uj9i0kopl[;-o0i9up8yo7t8i67uzxtyct8yviuobhipj
-//ewwxrdyctfuvygibuhnijkml]
-// salem alem comment
-// wazesxrdctfvygbuhnijm
-// rwetxrdcytfvugybhul,;
-//sw5e4trdy5ft6g7yh8uj9i0kopl[;-o0i9up8yo7t8i67uzxtyct8yviuobhipj
-//ewwxrdyctfuvygibuhnijkml]
-// salem alem comment
-// wazesxrdctfvygbuhnijm
-// rwetxrdcytfvugybhul,;
-//sw5e4trdy5ft6g7yh8uj9i0kopl[;-o0i9up8yo7t8i67uzxtyct8yviuobhipj
-//ewwxrdyctfuvygibuhnijkml]
-// salem alem comment
-// wazesxrdctfvygbuhnijm
-// rwetxrdcytfvugybhul,;
-//sw5e4trdy5ft6g7yh8uj9i0kopl[;-o0i9up8yo7t8i67uzxtyct8yviuobhipj
-//ewwxrdyctfuvygibuhnijkml]
-// salem alem comment
-// wazesxrdctfvygbuhnijm
-// rwetxrdcytfvugybhul,;
-//sw5e4trdy5ft6g7yh8uj9i0kopl[;-o0i9up8yo7t8i67uzxtyct8yviuobhipj
-//ewwxrdyctfuvygibuhnijkml]
