@@ -14,3 +14,5 @@ void setupDependencies() {
   sl.registerLazySingleton(() => GetWeatherByLocation(sl()));
   sl.registerLazySingleton(() => CitiesStorage());
 }
+
+// wefwefef

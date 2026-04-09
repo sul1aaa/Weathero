@@ -6,3 +6,5 @@ class LoadWeather extends WeatherEvent {
 }
 
 class LoadWeatherByLocation extends WeatherEvent {}
+
+// wefwefef
