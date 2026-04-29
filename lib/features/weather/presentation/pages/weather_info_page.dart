@@ -22,8 +22,6 @@ class _WeatherInfoPageState extends State<WeatherInfoPage> {
   static const _bgDark = Color(0xFF060A1A);
   static const _bgMid = Color(0xFF0A0F2C);
   static const _bgTop = Color(0xFF0D1B4B);
-  static const _cardColor = Color(0xFF0F1635);
-  static const _cardBorder = Color(0x14FFFFFF);
   static const _accent = Color(0xFF4FC3F7);
 
   void _loadWeather() {
