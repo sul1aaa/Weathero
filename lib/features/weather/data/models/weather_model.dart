@@ -181,4 +181,29 @@ class DayModel {
     required this.maxTemp,
     required this.icon,
   });
+
+  // DayModel({
+  //   required this.date,
+  //   required this.minTemp,
+  //   required this.maxTemp,
+  //   required this.icon,
+  // });
+  // DayModel({
+  //   required this.date,
+  //   required this.minTemp,
+  //   required this.maxTemp,
+  //   required this.icon,
+  // });
+  // DayModel({
+  //   required this.date,
+  //   required this.minTemp,
+  //   required this.maxTemp,
+  //   required this.icon,
+  // });
+  // DayModel({
+  //   required this.date,
+  //   required this.minTemp,
+  //   required this.maxTemp,
+  //   required this.icon,
+  // });
 }
