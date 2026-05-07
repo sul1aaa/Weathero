@@ -5,6 +5,7 @@ import 'package:weathero/features/weather/presentation/bloc/weather_bloc.dart';
 import 'package:weathero/features/weather/presentation/bloc/weather_event.dart';
 import 'package:weathero/features/weather/presentation/bloc/weather_state.dart';
 import 'package:weathero/features/weather/presentation/pages/cities_page.dart';
+import 'package:weathero/features/weather/presentation/pages/stats_page.dart';
 import 'package:weathero/features/weather/presentation/widgets/build_shimmer_widget.dart';
 
 class WeatherInfoPage extends StatefulWidget {
@@ -477,6 +478,13 @@ class _WeatherInfoPageState extends State<WeatherInfoPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (_) => const CitiesPage()),
+                    );
+                    return;
+                  }
+                  if (i == 2) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const StatsPage()),
                     );
                     return;
                   }
